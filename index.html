@@ -101,6 +101,7 @@ h1 span{display:inline-block;animation:letter 2.2s ease-in-out infinite}
   <div class="flask">🧪</div>
   <h1>Kuis Entalpi Standar!</h1>
   <p style="font-size:18px;margin:4px 0 0">Jenis-Jenis Perubahan Entalpi Standar (ΔH°) • Kimia • Kelas XI.F4 IPA Digital</p>
+  <div class="row" style="margin:10px 0 0"><button class="btn btn2" onclick="document.getElementById('nm').scrollIntoView({behavior:'smooth',block:'center'})">⬇️ Langsung ke Kuis</button><button class="btn btn2" onclick="board()">🏆 Papan Peringkat</button></div>
   <div class="tick"><div>ΔH° ✦ PEMBENTUKAN ✦ PENGURAIAN ✦ PEMBAKARAN ✦ NETRALISASI ✦ ΔH° ✦ PEMBENTUKAN ✦ PENGURAIAN ✦ PEMBAKARAN ✦ NETRALISASI ✦ </div></div>
   <div class="mat" style="text-align:left">
    <b>📘 Materi Pengantar: Entalpi Standar (ΔH°)</b><br>
@@ -188,7 +189,7 @@ const $=id=>document.getElementById(id);
 function show(id){['intro','quiz','res','bd'].forEach(x=>$(x).classList.toggle('hid',x!==id));const e=$(id);e.style.animation='none';void e.offsetWidth;e.style.animation='scrIn .7s cubic-bezier(.22,1,.36,1) both';scrollTo({top:0,behavior:'smooth'})}
 function start(){
  nama=$('nm').value.trim();kelas=KELAS;
- if(!nama){show('intro');$('er').textContent='Isi namamu dulu ya! ✍️';$('nm').focus();return}
+ if(!nama){$('er').textContent='⚠️ Isi namamu dulu ya! ✍️';$('nm').scrollIntoView({behavior:'smooth',block:'center'});$('nm').focus();return}
  $('er').textContent='';i=0;sc=0;st=0;ok=0;ans=[];show('quiz');load()}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function bars(a){return Object.entries(G).map(([k,v])=>{const p=Math.round(v.reduce((s,x)=>s+(a[x]||0),0)/v.length*100);return `<div class="tb"><span style="min-width:100px">${k}</span><div class="bar"><i style="width:${p}%"></i></div><em>${p}%</em></div>`}).join('')}
@@ -203,7 +204,7 @@ async function board(keep){
   $('bn').textContent=SHEET_URL?'':'Mode perangkat: hanya menampilkan data dari HP/laptop ini.';
   $('bt').innerHTML='<tr><td colspan=4>Memuat... ⏳</td></tr>';
   let d=[];
-  if(SHEET_URL){try{d=await(await fetch(SHEET_URL)).json()}catch(e){}}
+  if(SHEET_URL){try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),6000);d=await(await fetch(SHEET_URL,{signal:ac.signal})).json();clearTimeout(to)}catch(e){}}
   if(!d.length){try{d=JSON.parse(localStorage.getItem('kuisEntalpi')||'[]')}catch(e){}}
   ALL=d;
   $('kf').innerHTML='<option value="">Semua kelas</option>'+[...new Set(d.map(x=>x.kelas).filter(Boolean))].map(k=>'<option>'+esc(k)+'</option>').join('');
